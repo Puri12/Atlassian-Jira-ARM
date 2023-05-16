@@ -19,7 +19,7 @@ def test_server_xml_defaults(docker_cli, image):
 
     xml = parse_xml(container, f'{get_app_install_dir(container)}/conf/server.xml')
     connector = xml.find('.//Connector')
-    valve = xml.find('[@className="org.apache.catalina.valves.AccessLogValve"]')
+    valve = xml.find('.//Valve[@className="org.apache.catalina.valves.AccessLogValve"]')
 
     assert connector.get('port') == '8080'
     assert connector.get('maxThreads') == '100'
@@ -61,7 +61,7 @@ def test_server_xml_params(docker_cli, image):
     xml = parse_xml(container, f'{get_app_install_dir(container)}/conf/server.xml')
     connector = xml.find('.//Connector')
     context = xml.find('.//Context')
-    valve = xml.find('[@className="org.apache.catalina.valves.AccessLogValve"]')
+    valve = xml.find('.//Valve[@className="org.apache.catalina.valves.AccessLogValve"]')
 
     assert xml.get('port') == environment.get('ATL_TOMCAT_MGMT_PORT')
 
