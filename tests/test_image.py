@@ -19,7 +19,7 @@ def test_server_xml_defaults(docker_cli, image):
 
     xml = parse_xml(container, f'{get_app_install_dir(container)}/conf/server.xml')
     connector = xml.find('.//Connector')
-    context = xml.find('.//Context')
+    valve = xml.find('.//Valve[@className="org.apache.catalina.valves.AccessLogValve"]')
 
     assert connector.get('port') == '8080'
     assert connector.get('maxThreads') == '100'
@@ -33,6 +33,8 @@ def test_server_xml_defaults(docker_cli, image):
     assert connector.get('proxyName') == ''
     assert connector.get('proxyPort') == ''
     assert connector.get('maxHttpHeaderSize') == '8192'
+
+    assert valve.get('maxDays') == '-1'
 
 
 def test_server_xml_params(docker_cli, image):
@@ -51,6 +53,7 @@ def test_server_xml_params(docker_cli, image):
         'ATL_PROXY_PORT': '443',
         'ATL_TOMCAT_MAXHTTPHEADERSIZE': '8193',
         'ATL_TOMCAT_CONTEXTPATH': '/myjira',
+        'ATL_TOMCAT_ACCESS_LOGS_MAXDAYS': '10',
     }
     container = run_image(docker_cli, image, environment=environment)
     _jvm = wait_for_proc(container, get_bootstrap_proc(container))
@@ -58,6 +61,7 @@ def test_server_xml_params(docker_cli, image):
     xml = parse_xml(container, f'{get_app_install_dir(container)}/conf/server.xml')
     connector = xml.find('.//Connector')
     context = xml.find('.//Context')
+    valve = xml.find('.//Valve[@className="org.apache.catalina.valves.AccessLogValve"]')
 
     assert xml.get('port') == environment.get('ATL_TOMCAT_MGMT_PORT')
 
@@ -75,6 +79,8 @@ def test_server_xml_params(docker_cli, image):
     assert connector.get('maxHttpHeaderSize') == environment.get('ATL_TOMCAT_MAXHTTPHEADERSIZE')
 
     assert context.get('path') == environment.get('ATL_TOMCAT_CONTEXTPATH')
+
+    assert valve.get('maxDays') == environment.get('ATL_TOMCAT_ACCESS_LOGS_MAXDAYS')
 
 
 def test_dbconfig_xml_defaults_postgres(docker_cli, image):
