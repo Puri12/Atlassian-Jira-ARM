@@ -134,6 +134,12 @@ see https://tomcat.apache.org/tomcat-7.0-doc/config/index.html.
 * `ATL_TOMCAT_ACCEPTCOUNT` (default: 10)
 * `ATL_TOMCAT_MAXHTTPHEADERSIZE` (default: 8192)
 
+## Access Log Settings
+
+You can set the maximum number of days for access logs to be retained before being deleted. The default value of -1 means never delete old files.
+
+* `ATL_TOMCAT_MAXDAYS` (default: -1)
+
 ## JVM configuration
 
 If you need to pass additional JVM arguments to Jira, such as specifying a custom trust store, you can add them via the below environment variable

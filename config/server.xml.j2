@@ -57,7 +57,8 @@
 
       </Host>
       <Valve className="org.apache.catalina.valves.AccessLogValve"
-             pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
+             pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"
+             maxDays="{{ atl_tomcat_maxdays | default('-1') }}"/>
     </Engine>
 
   </Service>
