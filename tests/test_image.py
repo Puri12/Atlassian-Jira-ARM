@@ -283,7 +283,7 @@ def test_filestore_xml_params_avatars_s3_default(docker_cli, image, run_user):
     xml = parse_xml(container, f'{get_app_home(container)}/filestore-config.xml')
 
     assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKETNAME')
-    assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_REGION')
     assert xml.findtext('.//endpoint-override') is None
 
 def test_filestore_xml_params_avatars_s3_with_endpointoverride(docker_cli, image, run_user):
@@ -298,7 +298,7 @@ def test_filestore_xml_params_avatars_s3_with_endpointoverride(docker_cli, image
     xml = parse_xml(container, f'{get_app_home(container)}/filestore-config.xml')
 
     assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKETNAME')
-    assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_REGION')
     assert xml.findtext('.//endpoint-override') == environment.get('ATL_S3AVATARS_ENDPOINTOVERRIDE')
 
 def test_filestore_xml_params_avatars_s3_without_bucketname(docker_cli, image, run_user):
