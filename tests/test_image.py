@@ -272,6 +272,52 @@ def test_dbconfig_xml_params_mysql(docker_cli, image, run_user):
     assert xml.findtext('.//pool-test-while-idle') == environment.get('ATL_DB_TESTWHILEIDLE')
     assert xml.findtext('.//pool-test-on-borrow') == environment.get('ATL_DB_TESTONBORROW')
 
+def test_filestore_xml_params_avatars_s3_default(docker_cli, image, run_user):
+    environment = {
+        'ATL_S3AVATARS_BUCKETNAME': 'testBucket',
+        'ATL_S3AVATARS_REGION': 'testRegion',
+    }
+    container = run_image(docker_cli, image, user=run_user, environment=environment)
+    _jvm = wait_for_proc(container, get_bootstrap_proc(container))
+
+    xml = parse_xml(container, f'{get_app_home(container)}/filestore-config.xml')
+
+    assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//endpoint-override') is None
+
+def test_filestore_xml_params_avatars_s3_with_endpointoverride(docker_cli, image, run_user):
+    environment = {
+        'ATL_S3AVATARS_BUCKETNAME': 'testBucket',
+        'ATL_S3AVATARS_REGION': 'testRegion',
+        'ATL_S3AVATARS_ENDPOINTOVERRIDE': 'http://localhost:9090',
+    }
+    container = run_image(docker_cli, image, user=run_user, environment=environment)
+    _jvm = wait_for_proc(container, get_bootstrap_proc(container))
+
+    xml = parse_xml(container, f'{get_app_home(container)}/filestore-config.xml')
+
+    assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//endpoint-override') == environment.get('ATL_S3AVATARS_ENDPOINTOVERRIDE')
+
+def test_filestore_xml_params_avatars_s3_without_bucketname(docker_cli, image, run_user):
+    environment = {
+        'ATL_S3AVATARS_REGION': 'testRegion',
+    }
+    container = run_image(docker_cli, image, user=run_user, environment=environment)
+    _jvm = wait_for_proc(container, get_bootstrap_proc(container))
+
+    container.run_test(f'test ! -e {get_app_home(container)}/filestore-config.xml')
+
+def test_filestore_xml_params_avatars_s3_without_region(docker_cli, image, run_user):
+    environment = {
+        'ATL_S3AVATARS_BUCKETNAME': 'testBucket',
+    }
+    container = run_image(docker_cli, image, user=run_user, environment=environment)
+    _jvm = wait_for_proc(container, get_bootstrap_proc(container))
+
+    container.run_test(f'test ! -e {get_app_home(container)}/filestore-config.xml')
 
 def test_cluster_properties_defaults(docker_cli, image, run_user):
     environment = {
