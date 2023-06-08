@@ -287,11 +287,11 @@ def test_filestore_xml_params_avatars_s3_default(docker_cli, image, run_user):
     assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_REGION')
     assert xml.findtext('.//endpoint-override') is None
 
-def test_filestore_xml_params_avatars_s3_with_endpointoverride(docker_cli, image, run_user):
+def test_filestore_xml_params_avatars_s3_with_endpoint_override(docker_cli, image, run_user):
     environment = {
         'ATL_S3AVATARS_BUCKETNAME': 'testBucket',
         'ATL_S3AVATARS_REGION': 'testRegion',
-        'ATL_S3AVATARS_ENDPOINTOVERRIDE': 'http://localhost:9090',
+        'ATL_S3AVATARS_ENDPOINT_OVERRIDE': 'http://localhost:9090',
     }
     container = run_image(docker_cli, image, user=run_user, environment=environment)
     _jvm = wait_for_proc(container, get_bootstrap_proc(container))
@@ -300,7 +300,7 @@ def test_filestore_xml_params_avatars_s3_with_endpointoverride(docker_cli, image
 
     assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKETNAME')
     assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_REGION')
-    assert xml.findtext('.//endpoint-override') == environment.get('ATL_S3AVATARS_ENDPOINTOVERRIDE')
+    assert xml.findtext('.//endpoint-override') == environment.get('ATL_S3AVATARS_ENDPOINT_OVERRIDE')
 
 def test_filestore_xml_params_avatars_s3_without_bucketname(docker_cli, image, run_user):
     environment = {

@@ -158,6 +158,24 @@ Example:
 
    The maximum time a user can remain logged-in with 'Remember Me'.
 
+## S3 Avatars storage configuration
+Starting with Jira 9.9, you can configure Jira to store avatar files in Amazon S3. For requirements and additional 
+information, please refer to 
+[Configuring Amazon S3 Object Storage](https://confluence.atlassian.com/pages/viewpage.action?spaceKey=JSERVERM&title=.Configuring+Amazon+S3+object+storage+vJira_admin_9.9).
+
+* `ATL_S3AVATARS_BUCKETNAME`
+
+  Bucket name to store avatars.
+
+* `ATL_S3AVATARS_REGION`
+
+  AWS region where the S3 bucket is located.
+
+* `ATL_S3AVATARS_ENDPOINT_OVERRIDE`
+
+  Override the default AWS API endpoint with a custom one (optional).
+
+
 ## Database configuration
 
 It is optionally possible to configure the database from the environment,

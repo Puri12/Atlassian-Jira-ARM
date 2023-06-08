@@ -6,8 +6,8 @@
       <config>
         <bucket-name>{{ atl_s3avatars_bucketname }}</bucket-name>
         <region>{{ atl_s3avatars_region }}</region>
-        {% if atl_s3avatars_endpointoverride is defined and atl_s3avatars_endpointoverride|length %}
-        <endpoint-override>{{ atl_s3avatars_endpointoverride }}</endpoint-override>
+        {% if atl_s3avatars_endpoint_override is defined and atl_s3avatars_endpoint_override|length %}
+        <endpoint-override>{{ atl_s3avatars_endpoint_override }}</endpoint-override>
         {% endif %}
       </config>
     </s3-filestore>
