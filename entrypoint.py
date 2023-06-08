@@ -21,7 +21,7 @@ gen_cfg('seraph-config.xml.j2',
         f'{JIRA_INSTALL_DIR}/atlassian-jira/WEB-INF/classes/seraph-config.xml')
 gen_cfg('dbconfig.xml.j2', f'{JIRA_HOME}/dbconfig.xml',
         user=RUN_USER, group=RUN_GROUP, overwrite=UPDATE_CFG)
-if env.get('atl_s3avatars_bucketname') and env.get('atl_s3avatars_region'):
+if env.get('atl_s3avatars_bucket_name') and env.get('atl_s3avatars_region'):
     gen_cfg('filestore-config.xml.j2', f'{JIRA_HOME}/filestore-config.xml',
         user=RUN_USER, group=RUN_GROUP, overwrite=True)
 if str2bool(env.get('clustered')):

@@ -163,7 +163,7 @@ Starting with Jira 9.9, you can configure Jira to store avatar files in Amazon S
 information, please refer to 
 [Configuring Amazon S3 Object Storage](https://confluence.atlassian.com/pages/viewpage.action?spaceKey=JSERVERM&title=.Configuring+Amazon+S3+object+storage+vJira_admin_9.9).
 
-* `ATL_S3AVATARS_BUCKETNAME`
+* `ATL_S3AVATARS_BUCKET_NAME`
 
   Bucket name to store avatars.
 

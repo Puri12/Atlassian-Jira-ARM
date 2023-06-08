@@ -275,7 +275,7 @@ def test_dbconfig_xml_params_mysql(docker_cli, image, run_user):
 
 def test_filestore_xml_params_avatars_s3_default(docker_cli, image, run_user):
     environment = {
-        'ATL_S3AVATARS_BUCKETNAME': 'testBucket',
+        'ATL_S3AVATARS_BUCKET_NAME': 'testBucket',
         'ATL_S3AVATARS_REGION': 'testRegion',
     }
     container = run_image(docker_cli, image, user=run_user, environment=environment)
@@ -283,13 +283,13 @@ def test_filestore_xml_params_avatars_s3_default(docker_cli, image, run_user):
 
     xml = parse_xml(container, f'{get_app_home(container)}/filestore-config.xml')
 
-    assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKET_NAME')
     assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_REGION')
     assert xml.findtext('.//endpoint-override') is None
 
 def test_filestore_xml_params_avatars_s3_with_endpoint_override(docker_cli, image, run_user):
     environment = {
-        'ATL_S3AVATARS_BUCKETNAME': 'testBucket',
+        'ATL_S3AVATARS_BUCKET_NAME': 'testBucket',
         'ATL_S3AVATARS_REGION': 'testRegion',
         'ATL_S3AVATARS_ENDPOINT_OVERRIDE': 'http://localhost:9090',
     }
@@ -298,11 +298,11 @@ def test_filestore_xml_params_avatars_s3_with_endpoint_override(docker_cli, imag
 
     xml = parse_xml(container, f'{get_app_home(container)}/filestore-config.xml')
 
-    assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKETNAME')
+    assert xml.findtext('.//bucket-name') == environment.get('ATL_S3AVATARS_BUCKET_NAME')
     assert xml.findtext('.//region') == environment.get('ATL_S3AVATARS_REGION')
     assert xml.findtext('.//endpoint-override') == environment.get('ATL_S3AVATARS_ENDPOINT_OVERRIDE')
 
-def test_filestore_xml_params_avatars_s3_without_bucketname(docker_cli, image, run_user):
+def test_filestore_xml_params_avatars_s3_without_bucket_name(docker_cli, image, run_user):
     environment = {
         'ATL_S3AVATARS_REGION': 'testRegion',
     }
@@ -313,7 +313,7 @@ def test_filestore_xml_params_avatars_s3_without_bucketname(docker_cli, image, r
 
 def test_filestore_xml_params_avatars_s3_without_region(docker_cli, image, run_user):
     environment = {
-        'ATL_S3AVATARS_BUCKETNAME': 'testBucket',
+        'ATL_S3AVATARS_BUCKET_NAME': 'testBucket',
     }
     container = run_image(docker_cli, image, user=run_user, environment=environment)
     _jvm = wait_for_proc(container, get_bootstrap_proc(container))
