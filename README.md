@@ -376,6 +376,16 @@ as a non-root user.
    Define whether to set home directory permissions on startup. Set to `false` to disable
    this behaviour.
 
+* `ATL_UNSET_SENSITIVE_ENV_VARS` (default: true)
+
+  **WARNING:** When using this property, the values to sensitive environment variables (see below) will
+  be available in clear text on the host OS. As such, this data may be exposed to users or processes
+  running on the host OS.
+
+  Define whether to unset environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN'.
+  The unset function is executed in the entrypoint. Set to `false` if you want to allow passing
+  sensitive environment variables to Confluence container.
+
 ## Advanced Configuration
 
 As mentioned at the top of this section, the settings from the environment are
