@@ -581,7 +581,8 @@ def test_unset_secure_vars(docker_cli, image, run_user):
     environment = {
         'MY_TOKEN': 'tokenvalue',
     }
-    container = docker_cli.containers.run(image, detach=True, user=run_user, ports={PORT: PORT})
+    container = docker_cli.containers.run(image, detach=True, user=run_user, environment=environment,
+                                          ports={PORT: PORT})
     wait_for_state(STATUS_URL, expected_state='FIRST_RUN')
     var_unset_log_line = 'Unsetting environment var MY_TOKEN'
     wait_for_log(container, var_unset_log_line)
@@ -592,7 +593,8 @@ def test_skip_unset_secure_vars(docker_cli, image, run_user):
         'MY_TOKEN': 'tokenvalue',
         'ATL_UNSET_SENSITIVE_ENV_VARS': 'false',
     }
-    container = docker_cli.containers.run(image, detach=True, user=run_user, ports={PORT: PORT})
+    container = docker_cli.containers.run(image, detach=True, user=run_user, environment=environment,
+                                          ports={PORT: PORT})
     wait_for_state(STATUS_URL, expected_state='FIRST_RUN')
     var_unset_log_line = 'Unsetting environment var MY_TOKEN'
     rpat = re.compile(var_unset_log_line)
