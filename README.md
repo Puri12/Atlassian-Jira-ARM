@@ -384,7 +384,7 @@ as a non-root user.
 
   Define whether to unset environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN'.
   The unset function is executed in the entrypoint. Set to `false` if you want to allow passing
-  sensitive environment variables to Confluence container.
+  sensitive environment variables to Jira container.
 
 ## Advanced Configuration
 
