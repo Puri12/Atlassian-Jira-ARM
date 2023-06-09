@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<filestore-config>
+  <filestores>
+    <s3-filestore id="avatarBucket">
+      <config>
+        <bucket-name>{{ atl_s3avatars_bucket_name }}</bucket-name>
+        <region>{{ atl_s3avatars_region }}</region>
+        {% if atl_s3avatars_endpoint_override -%}
+        <endpoint-override>{{ atl_s3avatars_endpoint_override }}</endpoint-override>
+        {% endif -%}
+      </config>
+    </s3-filestore>
+  </filestores>
+  <associations>
+    <association target="avatars" file-store="avatarBucket"/>
+  </associations>
+</filestore-config>

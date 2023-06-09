@@ -158,6 +158,24 @@ Example:
 
    The maximum time a user can remain logged-in with 'Remember Me'.
 
+## S3 Avatars storage configuration
+Starting with Jira 9.9, you can configure Jira to store avatar files in Amazon S3. For requirements and additional 
+information, please refer to 
+[Configuring Amazon S3 Object Storage](https://confluence.atlassian.com/pages/viewpage.action?spaceKey=JSERVERM&title=.Configuring+Amazon+S3+object+storage+vJira_admin_9.9).
+
+* `ATL_S3AVATARS_BUCKET_NAME`
+
+  Bucket name to store avatars.
+
+* `ATL_S3AVATARS_REGION`
+
+  AWS region where the S3 bucket is located.
+
+* `ATL_S3AVATARS_ENDPOINT_OVERRIDE`
+
+  Override the default AWS API endpoint with a custom one (optional).
+
+
 ## Database configuration
 
 It is optionally possible to configure the database from the environment,
@@ -375,6 +393,16 @@ as a non-root user.
 
    Define whether to set home directory permissions on startup. Set to `false` to disable
    this behaviour.
+
+* `ATL_UNSET_SENSITIVE_ENV_VARS` (default: true)
+
+  **WARNING:** When using this property, the values to sensitive environment variables (see below) will
+  be available in clear text on the host OS. As such, this data may be exposed to users or processes
+  running on the host OS.
+
+  Define whether to unset environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN'.
+  The unset function is executed in the entrypoint. Set to `false` if you want to allow passing
+  sensitive environment variables to Jira container.
 
 ## Advanced Configuration
 
