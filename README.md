@@ -389,6 +389,12 @@ as a non-root user.
    See [the entrypoint code](entrypoint.py) for the details of how configuration
    files are generated.
 
+*  `ATL_ALLOWLIST_SENSITIVE_ENV_VARS`
+
+  **WARNING:** When using this property, the values to sensitive environment variables will be available in clear text on the host OS. As such, this data may be exposed to users or processes running on the host OS.
+
+  Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
+
 * `SET_PERMISSIONS` (default: true)
 
    Define whether to set home directory permissions on startup. Set to `false` to disable
