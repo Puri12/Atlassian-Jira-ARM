@@ -607,3 +607,47 @@ def test_skip_unset_secure_vars(docker_cli, image, run_user):
         if rpat.search(line):
             raise EOFError(f"Found unexpected log line '{var_unset_log_line}'")
 
+def test_skip_default_whitelisted_secure_vars(docker_cli, image, run_user):
+    environment = {
+        'AWS_WEB_IDENTITY_TOKEN_FILE': '/path/to/file',
+        'com_atlassian_db_config_password_ciphers_algorithm_javax_crypto_foor_bar': '/path/to/file'
+    }
+    container = docker_cli.containers.run(image, detach=True, user=run_user, environment=environment,
+                                          ports={PORT: PORT})
+    wait_for_state(STATUS_URL, expected_state='FIRST_RUN')
+    rpat = re.compile(r'Unsetting environment var (AWS_WEB_IDENTITY_TOKEN_FILE|com_atlassian_db_config_password_ciphers_algorithm_javax_crypto_foor_bar)')
+    logs = container.logs(stream=True, follow=True)
+    li = TimeoutIterator(logs, timeout=1)
+    for line in li:
+        if line == li.get_sentinel():
+            return
+        line = line.decode('UTF-8')
+        if rpat.search(line):
+            print(line)
+            raise EOFError(f"Found unexpected log line")
+
+def test_skip_custom_whitelisted_secure_vars(docker_cli, image, run_user):
+    environment = {
+        'MY_TOKEN': 'tokenvalue',
+        'SECRET': 'secretvalue',
+        'MY_PASS': 'passvalue',
+        'ATL_WHITELIST_SENSITIVE_ENV_VARS': 'MY_TOKEN, MY_PASS',
+    }
+    container = docker_cli.containers.run(image, detach=True, user=run_user, environment=environment, ports={PORT: PORT})
+    wait_for_state(STATUS_URL, expected_state='FIRST_RUN')
+
+    # ensure SECRET env var is unset
+    var_unset_log_line_secret = 'Unsetting environment var SECRET'
+    wait_for_log(container, var_unset_log_line_secret)
+
+    # ensure MY_TOKEN and MY_PASS are not unset as they are in the whitelist
+    rpat = re.compile(r'Unsetting environment var (MY_TOKEN|MY_PASS)')
+    logs = container.logs(stream=True, follow=True)
+    li = TimeoutIterator(logs, timeout=1)
+    for line in li:
+        if line == li.get_sentinel():
+            return
+        line = line.decode('UTF-8')
+        if rpat.search(line):
+            print(line)
+            raise EOFError(f"Found unexpected log line")
